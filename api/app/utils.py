@@ -4,7 +4,7 @@ from datetime import timedelta
 from flask import make_response, request, current_app, abort
 from functools import update_wrapper, wraps
 import re
-from models import User
+from models.user import User
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 from app import app
 
@@ -75,13 +75,42 @@ def authorized(fn):
     return _wrap
 
 
-def is_email_address_valid(email):
+def generate_auth_token(user=None, expiration=86400):
+    if user:
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': str(user.id)})
+    return None
+
+
+def is_valid_email(email):
+    if not email:
+        return False
     return re.match("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$", email)
 
 
-def is_password_valid(password):
+def is_valid_password(password):
+    if not password:
+        return False
     return len(password) > 4
 
 
-def is_url_valid(url):
+def is_valid_url(url):
+    if not url:
+        return None
     return len(url) > 4
+
+
+def get_login_form_errors(email, password):
+    errors = []
+
+    if not is_valid_email(email):
+        errors.append('Invalid email address')
+
+    if not is_valid_password(password):
+        errors.append('Invalid password')
+
+    return errors
+
+
+def get_bookmark(bookmark=None):
+    return bookmark
