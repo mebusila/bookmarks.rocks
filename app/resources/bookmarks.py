@@ -1,15 +1,15 @@
 __author__ = 'Serban Carlogea'
 
 
-from app import app
 from app.models.bookmark import Bookmark
 from mongoengine import ValidationError
 from flask import request, jsonify, abort
 from app.utils import crossdomain, authorized, is_valid_url
 import datetime
+from . import resources
 
 
-@app.route('/bookmarks', methods=['GET', 'OPTIONS'])
+@resources.route('/bookmarks', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 @authorized
 def bookmarks(user=None):
@@ -63,7 +63,7 @@ def bookmarks(user=None):
     return jsonify(bookmarks=bookmarks), 200
 
 
-@app.route('/bookmarks/<bookmark_id>', methods=['GET', 'OPTIONS'])
+@resources.route('/bookmarks/<bookmark_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 @authorized
 def bookmark(user=None, bookmark_id=None):
@@ -120,7 +120,7 @@ def bookmark(user=None, bookmark_id=None):
         abort(404)
 
 
-@app.route('/bookmarks', methods=['POST', 'OPTIONS'])
+@resources.route('/bookmarks', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 @authorized
 def add(user=None):
@@ -179,7 +179,7 @@ def add(user=None):
     return jsonify(errors=[bookmark.to_dict()]), 400
 
 
-@app.route('/bookmarks/<bookmark_id>', methods=['DELETE', 'OPTIONS'])
+@resources.route('/bookmarks/<bookmark_id>', methods=['DELETE', 'OPTIONS'])
 @crossdomain(origin='*')
 @authorized
 def delete(user=None, bookmark_id=None):

@@ -1,12 +1,12 @@
 __author__ = 'Serban Carlogea'
 
-from app import app
+
 from app.models.user import User
 from flask import request, jsonify
 from app.utils import crossdomain, generate_auth_token, get_login_form_errors, authorized
+from . import resources
 
-
-@app.route('/users', methods=['POST', 'OPTIONS'])
+@resources.route('/users', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def register():
     """
@@ -76,7 +76,7 @@ def register():
     return jsonify(errors=['Undefined error']), 400
 
 
-@app.route('/users/token', methods=['POST', 'OPTIONS'])
+@resources.route('/users/token', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def login():
     """
@@ -139,7 +139,7 @@ def login():
     return jsonify(errors=['Invalid login']), 401
 
 
-@app.route('/users/me', methods=['GET', 'OPTIONS'])
+@resources.route('/users/me', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 @authorized
 def get(user=None):
@@ -150,7 +150,7 @@ def get(user=None):
     pass
 
 
-@app.route('/users/me', methods=['PUT', 'OPTIONS'])
+@resources.route('/users/me', methods=['PUT', 'OPTIONS'])
 @crossdomain(origin='*')
 @authorized
 def edit(user=None):

@@ -6,7 +6,7 @@ from functools import update_wrapper, wraps
 import re
 from models.user import User
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
-from app import app
+
 
 
 def crossdomain(origin=None, methods=None, headers=['Authorization'],
@@ -53,7 +53,7 @@ def crossdomain(origin=None, methods=None, headers=['Authorization'],
 
 def authorized(fn):
     def verify_auth_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except SignatureExpired:
@@ -77,7 +77,7 @@ def authorized(fn):
 
 def generate_auth_token(user=None, expiration=86400):
     if user:
-        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': str(user.id)})
     return None
 
