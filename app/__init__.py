@@ -42,7 +42,7 @@ def create_app(config_name):
                 mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
                 fromaddr=app.config['MAIL_DEFAULT_SENDER'],
                 toaddrs=[app.config['MAIL_ERROR_RECIPIENT']],
-                subject='[VIP Products Store] Application Error',
+                subject='[Bookmarks rocks] Application Error',
                 credentials=credentials,
                 secure=secure)
             mail_handler.setLevel(logging.ERROR)
